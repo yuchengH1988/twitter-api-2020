@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 function repliesInfos(tweet) {
   const infos = tweet.Replies.map(r => ({
     id: r.id,
@@ -18,6 +20,14 @@ function getUser(req) {
   return req.user
 }
 
+function formatMessage(username, text) {
+  return {
+    username,
+    text,
+    time: moment().format('h:mm a')
+  }
+
+}
 module.exports = {
-  getUser, repliesInfos
+  getUser, repliesInfos, formatMessage
 }
