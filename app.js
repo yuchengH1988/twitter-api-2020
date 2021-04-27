@@ -22,10 +22,8 @@ app.use(bodyParser.json())
 require('./routes')(app)
 
 const io = require('socket.io')(httpServer)
-const socketController = require('./sockets/socketController')
-io.on('connection', function (socket) {
-  socketController.respond(socket)
-})
+require('./sockets/socketServer')(io)
+
 app.get('/socketchat', (req, res) => {
   res.sendFile(__dirname + '/sockets/index.html');
 });
