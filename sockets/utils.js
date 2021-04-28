@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const moment = require('moment')
 const User = require('../models').User
 
 async function authenticated(socket, next) {
@@ -21,4 +22,17 @@ async function authenticated(socket, next) {
   }
 }
 
-module.exports = authenticated
+function userIndex(users, userId) {
+  let index = users.findIndex(user => user.id === userId)
+  return index
+}
+
+function formatMessage(username, text) {
+  return {
+    username,
+    text,
+    time: moment().format('h:mm a')
+  }
+}
+
+module.exports = { authenticated, userIndex, formatMessage }
