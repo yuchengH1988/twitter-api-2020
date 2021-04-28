@@ -1,4 +1,5 @@
 const moment = require('moment')
+const { useFakeServer } = require('sinon')
 
 function repliesInfos(tweet) {
   const infos = tweet.Replies.map(r => ({
@@ -26,8 +27,12 @@ function formatMessage(username, text) {
     text,
     time: moment().format('h:mm a')
   }
+}
 
+function userIndex(users, userId) {
+  let index = users.findIndex(user => user.id === userId)
+  return index
 }
 module.exports = {
-  getUser, repliesInfos, formatMessage
+  getUser, repliesInfos, formatMessage, userIndex
 }

@@ -27,6 +27,10 @@ require('./sockets/socketServer')(io)
 app.get('/socketchat', (req, res) => {
   res.sendFile(__dirname + '/sockets/index.html');
 });
+//測試用
+app.get('/socketchat/:userId', (req, res) => {
+  res.sendFile(__dirname + '/sockets/index.html');
+});
 
 httpServer.listen(port)
 
