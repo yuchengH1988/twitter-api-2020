@@ -1,6 +1,7 @@
 const { relativeTimeRounding } = require('moment')
 const { userIndex, authenticated, formatMessage } = require('./utils')
 const users = []
+const Msg = require('../models').Msg
 module.exports = (io) => {
   // 聊天室使用者驗證
   io.use(authenticated)
@@ -20,6 +21,10 @@ module.exports = (io) => {
     //socket打開接收器的狀態 接收data =msg
     socket.on('userMsg', msg => {
       // 存入DATA
+      Msg.create({
+        userId: socket.user.id,
+        msg: msg
+      })
       // 
       io.emit('chatMsg', formatMessage(socket.user.name, msg))
     })

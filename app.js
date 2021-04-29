@@ -23,6 +23,7 @@ require('./routes')(app)
 
 const io = require('socket.io')(httpServer)
 require('./sockets/socketServer')(io)
+const Msg = require('./models').Msg
 
 app.get('/socketchat', (req, res) => {
   res.sendFile(__dirname + '/sockets/index.html');
