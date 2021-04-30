@@ -26,6 +26,11 @@ function userIndex(users, userId) {
   let index = users.findIndex(user => user.id === userId)
   return index
 }
+function filterData(data) {
+  const set = new Set()
+  const dataFilter = data.filter(item => !set.has(item.id) ? set.add(item.id) : false)
+  return dataFilter
+}
 
 function formatMessage(username, text) {
   return {
@@ -35,4 +40,4 @@ function formatMessage(username, text) {
   }
 }
 
-module.exports = { authenticated, userIndex, formatMessage }
+module.exports = { authenticated, userIndex, formatMessage, filterData }

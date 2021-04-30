@@ -69,10 +69,10 @@
 
   <script src="../socket.io/socket.io.js"></script>
   <script>
-    const tokens = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjE5NjgzNTM3fQ.3WNtmbCQMlfaLPNBOFglAgu96rMfkxCQ3O_v0j9fYY8', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjE5NjgzNTE1fQ.dberzI8kf7uliz4gc2J3vzITHFTzUfgSCbef5eADNDw', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjE5NjgzNDgyfQ.xkhKfOe1za8XVxLUMgFZdscUzkJJjjf13w2ifJQVesg']
+    const tokens = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjE5NzYyNzkzfQ.JJLBDzw97USi5SjGxYtYMJpjIBCBqfwNECQRS9aK8Vk', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjE5NzYyODEwfQ.vxapGUnGayhH-AYFQc7t08tFtQGpZHI3Y_MZAaq0ZOk']
     const socket = io('', {
       auth: {
-        token: tokens[Math.floor(Math.random() * 3)]
+        token: tokens[Math.floor(Math.random() * 2)]
       }
     });
     const chatMessages = document.querySelector('.chat-messages')
