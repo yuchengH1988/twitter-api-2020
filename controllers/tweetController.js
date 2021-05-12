@@ -4,7 +4,7 @@ const Tweet = db.Tweet
 const Reply = db.Reply
 const Like = db.Like
 const helpers = require('../_helpers')
-const { addTweetNotice, addReplyNotice } = require('../services/notifyService')
+const { addTweetNotice, addReplyNotice, addLikeNotice } = require('../services/notifyService')
 
 const tweetController = {
   //  列出所有tweets以及資訊
@@ -170,13 +170,15 @@ const tweetController = {
       if (await Tweet.findByPk(TweetId) === null) {
         return res.status(404).json({ status: 'error', message: "This tweetId doesn't exist." })
       } else {
-        await Like.create({
+        req.newLike = await Like.create({
           UserId: helpers.getUser(req).id,
           TweetId: TweetId
         })
       }
-
-      return (res.status(201).json({ status: 'success', message: 'Like has built successfully!' }), next())
+      // 建立通知
+      let notifyMsg = []
+      await addLikeNotice(req, res, (data) => { notifyMsg = data })
+      return (res.status(201).json({ status: 'success', message: 'Like has built successfully!', notifyMsg }), next())
     } catch (e) { return (res.json({ status: 'error', message: 'Failed to build a like.' }), next(e)) }
   },
   tweetUnlike: async (req, res, next) => {

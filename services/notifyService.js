@@ -58,27 +58,28 @@ const notifyService = {
   }
   ,
   // 建立 Like 通知
-  addLikeNotice: async (req, res, next) => {
+  addLikeNotice: async (req, res, callback) => {
     try {
       // 抓出Like相關資料
-      const like = await Like.findAll({
+      let newLike = req.newLike.dataValues
+      const tweet = await Tweet.findByPk(newLike.TweetId, {
         raw: true,
-        nest: true,
-        limit: 1,
-        order: [['createdAt', 'DESC']],
-        include: [Tweet]
+        nest: true
       })
       // 建立Notify , 當Like者跟作者相同則不建立
-      if (like[0].Tweet.UserId !== getUser(req).id) {
+      if (tweet.UserId !== getUser(req).id) {
         await Notify.create({
-          receiverId: like[0].Tweet.UserId,
+          receiverId: tweet.UserId,
           senderId: getUser(req).id,
-          objectId: like[0].id,
+          objectId: newLike.id,
           objectType: 'likes',
           objectText: null
         })
+        callback({ status: 'success', message: 'Notification have been built.' })
+      } else {
+        callback({ status: 'none', message: 'no notification' })
       }
-    } catch (e) { return next(e) }
+    } catch (e) { console.log(e) }
   }
   ,
   //建立Follow 通知
