@@ -4,6 +4,7 @@ const Tweet = db.Tweet
 const Reply = db.Reply
 const Like = db.Like
 const helpers = require('../_helpers')
+const { addTweetNotice, addReplyNotice } = require('../services/notifyService')
 
 const tweetController = {
   //  列出所有tweets以及資訊
@@ -104,8 +105,12 @@ const tweetController = {
       } else if (description.length > 140) {
         return res.status(413).json({ status: 'error', message: "Description max length is 140 words" })
       }
-      await Tweet.create({ UserId, description })
-      return (res.status(201).json({ status: 'success', message: 'Tweet has built successfully!' }), next())
+      req.newTweet = await Tweet.create({ UserId, description })
+      // 建立通知
+      let notifyMsg = []
+      await addTweetNotice(req, res, (data) => { notifyMsg = data })
+
+      return (res.status(201).json({ status: 'success', message: 'Tweet has built successfully!', notifyMsg }), next())
     } catch (e) {
       console.log(e)
       return next(e)
@@ -148,6 +153,8 @@ const tweetController = {
         return res.status(413).json({ status: 'error', message: "comment max length is 140 words" })
       }
       await Reply.create({ TweetId, UserId, comment })
+
+
       return (res.status(201).json({ status: 'success', message: 'Reply has built successfully!' }), next())
 
     } catch (e) {

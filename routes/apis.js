@@ -33,7 +33,7 @@ router.get('/users/:id/followers', authenticated, userController.getFollowers)
 router.get('/users/:id/followings', authenticated, userController.getFollowings)
 // routes : tweets
 router.get('/tweets', authenticated, tweetController.getTweets)
-router.post('/tweets', authenticated, tweetController.postTweet, notifyService.addTweetNotice)
+router.post('/tweets', authenticated, tweetController.postTweet)
 router.get('/tweets/:tweet_Id/replies', authenticated, tweetController.getReplies)
 router.post('/tweets/:tweet_Id/replies', authenticated, tweetController.postReply)
 router.post('/tweets/:tweet_Id/like', authenticated, tweetController.tweetLike)
