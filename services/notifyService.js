@@ -61,7 +61,7 @@ const notifyService = {
   addLikeNotice: async (req, res, callback) => {
     try {
       // 抓出Like相關資料
-      let newLike = req.newLike.dataValues
+      const newLike = req.newLike.dataValues
       const tweet = await Tweet.findByPk(newLike.TweetId, {
         raw: true,
         nest: true
@@ -83,22 +83,18 @@ const notifyService = {
   }
   ,
   //建立Follow 通知
-  addFollowNotice: async (req, res, next) => {
+  addFollowNotice: async (req, res, callback) => {
     try {// 抓出Follow相關資料
-      const followship = await Followship.findAll({
-        raw: true,
-        nest: true,
-        limit: 1,
-        order: [['createdAt', 'DESC']]
-      })
+      const newFollowship = req.newFollowship.dataValues
       await Notify.create({
-        receiverId: followship[0].followingId,
+        receiverId: newFollowship.followingId,
         senderId: getUser(req).id,
-        objectId: followship[0].id,
+        objectId: newFollowship.id,
         objectType: 'followships',
         objectText: null
       })
-    } catch (e) { return next(e) }
+      callback({ status: 'success', message: 'Notification have been built.' })
+    } catch (e) { console.log(e) }
   }
   ,
   haveRead: async (req, res, next) => {

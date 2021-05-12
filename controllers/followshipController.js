@@ -1,6 +1,7 @@
 const db = require('../models')
 const Followship = db.Followship
 const helpers = require('../_helpers')
+const { addFollowNotice } = require('../services/notifyService')
 const followshipController = {
   addFollowing: async (req, res, next) => {
     try {
@@ -10,10 +11,13 @@ const followshipController = {
       if (!followerId || !followingId) {
         return res.status(404).json({ status: 'error', message: "Can't find followerId." })
       }
-      await Followship.create({
+      req.newFollowship = await Followship.create({
         followerId, followingId
       })
-      return (res.status(201).json({ status: 'success', message: 'Followship has built successfully!' }), next())
+      // 建立通知
+      let notifyMsg = []
+      await addFollowNotice(req, res, (data) => { notifyMsg = data })
+      return (res.status(201).json({ status: 'success', message: 'Followship has built successfully!', notifyMsg }), next())
 
     } catch (e) {
       console.log(e)
