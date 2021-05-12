@@ -152,10 +152,12 @@ const tweetController = {
       } else if (comment.length > 140) {
         return res.status(413).json({ status: 'error', message: "comment max length is 140 words" })
       }
-      await Reply.create({ TweetId, UserId, comment })
+      req.newReply = await Reply.create({ TweetId, UserId, comment })
+      // 建立通知
+      let notifyMsg = []
+      await addReplyNotice(req, res, (data) => { notifyMsg = data })
 
-
-      return (res.status(201).json({ status: 'success', message: 'Reply has built successfully!' }), next())
+      return (res.status(201).json({ status: 'success', message: 'Reply has built successfully!', notifyMsg }), next())
 
     } catch (e) {
       console.log(e)
