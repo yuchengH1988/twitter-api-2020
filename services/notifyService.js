@@ -6,33 +6,29 @@ const { getUser } = require('../_helpers')
 const notifyService = {
 
   // 建立 tweet 通知 
-  addTweetNotice: async (req, res, next) => {
+  addTweetNotice: async (req, res, callback) => {
     try {
       // 抓出新建立的tweet
-      const tweet = await Tweet.findAll({
-        raw: true,
-        nest: true,
-        limit: 1,
-        order: [['createdAt', 'DESC']]
-      })
-      // 核對作者查出訂閱者們
+      let newTweet = req.newTweet.dataValues
       const subscripts = await Subscript.findAll({
         raw: true,
         nest: true,
-        where: { authorId: tweet[0].UserId }
+        where: { authorId: newTweet.UserId }
       })
       // 建立notify
       if (subscripts) {
         await subscripts.forEach(subscript => Notify.create({
           receiverId: subscript.subscriberId,
           senderId: getUser(req).id,
-          objectId: tweet[0].id,
+          objectId: newTweet.id,
           objectType: 'tweets',
-          objectText: tweet[0].description
+          objectText: newTweet.description
         }))
+        callback({ status: 'success', message: 'Notification have been built.' })
       }
+      else { callback({ status: 'none', message: 'no subscription for notification' }) }
     } catch (e) {
-      return next(e)
+      console.log(e)
     }
   },
   // 建立 Reply 通知
