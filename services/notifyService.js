@@ -26,7 +26,7 @@ const notifyService = {
         }))
         callback({ status: 'success', message: 'Notification have been built.' })
       }
-      else { callback({ status: 'none', message: 'no subscription for notification' }) }
+      else { callback({ message: 'no subscription for notification' }) }
     } catch (e) {
       console.log(e)
     }
@@ -52,7 +52,7 @@ const notifyService = {
         })
         callback({ status: 'success', message: 'Notification have been built.' })
       } else {
-        callback({ status: 'none', message: 'no notification' })
+        callback({ message: 'no notification' })
       }
     } catch (e) { console.log(e) }
   }
@@ -77,7 +77,7 @@ const notifyService = {
         })
         callback({ status: 'success', message: 'Notification have been built.' })
       } else {
-        callback({ status: 'none', message: 'no notification' })
+        callback({ message: 'no notification' })
       }
     } catch (e) { console.log(e) }
   }

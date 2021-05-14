@@ -41,8 +41,8 @@ const notifyController = {
           }
         }
       })
-      if (!notifies) {
-        return res.json({ message: "There aren't notification to this User." })
+      if (notifies.length === 0) {
+        return res.status(200).json({ message: "There aren't notification to this User." })
       } else {
         return (res.status(201).json({ notifies }), next())
       }
