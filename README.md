@@ -1,7 +1,7 @@
-# Simple Tweeter API
+# Simple Twitter API
 
 
-模擬Tweeter的團體專案練習。
+模擬Twitter的團體專案練習。
 
 ### Base URL
 
@@ -119,12 +119,6 @@ error
 GET /api/admin/users/
 ```
 
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以一個使用者為例 )
@@ -144,7 +138,6 @@ Success ( 以一個使用者為例 )
     }
 ]
 ```
-
 error
 
 ```jsx
@@ -156,13 +149,6 @@ error
 ```jsx
 DELETE /api/admin/tweets/:id
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success
@@ -265,13 +251,6 @@ error
 ```jsx
 GET /api/users/:id
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success
@@ -345,13 +324,6 @@ error
 ```jsx
 GET /api/users/:id/tweets
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以一則為例 )
@@ -389,12 +361,6 @@ error
 ```jsx
 GET /api/users/:id/replied_tweets
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
@@ -438,13 +404,6 @@ error
 ```jsx
 GET /api/users/:id/likes
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以一則tweet為例 )
@@ -488,13 +447,6 @@ error
 ```jsx
 GET /api/users/:id/followers
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以一位跟隨者為例 )
@@ -527,12 +479,6 @@ error
 GET /api/users/:id/followings
 ```
 
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success
@@ -564,12 +510,6 @@ error
 GET /api/users/tops
 ```
 
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以1個user為例 )
@@ -591,13 +531,6 @@ Success ( 以1個user為例 )
 ```jsx
 GET /api/users/currentUser
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success ( 以1個user為例 )
@@ -622,10 +555,9 @@ POST /api/followships/
 
 **Request**
 
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-| id            | INTEGER      | 追蹤者id           |
+| 欄位(Params) | 型別( type ) | 說明 (description) |
+| ------------ | ------------ | ------------------ |
+| id           | INTEGER      | 追蹤者id           |
 
 **Response**
 
@@ -652,12 +584,6 @@ error
 ```jsx
 DELETE /api/followships/:userId
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
@@ -686,12 +612,6 @@ error
 ```jsx
 GET/api/tweets
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
@@ -730,12 +650,6 @@ error
 ```jsx
 GET/api/tweets/:tweetId
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
@@ -789,10 +703,9 @@ POST/api/tweets/
 
 **Request**
 
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-| description   | String       | 140字以下          |
+| 欄位(Params) | 型別( type ) | 說明 (description) |
+| ------------ | ------------ | ------------------ |
+| description  | String       | 140字以下          |
 
 **Response**
 
@@ -826,12 +739,6 @@ error
 ```jsx
 GET/api/tweets/:tweetId/replies
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
@@ -869,10 +776,9 @@ POST/api/tweets/:tweetId/replies
 
 **Request**
 
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-| comment       | String       | 140字以下          |
+| 欄位(Params) | 型別( type ) | 說明 (description) |
+| ------------ | ------------ | ------------------ |
+| comment      | String       | 140字以下          |
 
 **Response**
 
@@ -907,12 +813,6 @@ error
 POST/api/tweets/:tweetId/like
 ```
 
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success
@@ -939,12 +839,6 @@ error
 POST/api/tweets/:tweetId/unlike
 ```
 
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
-
 **Response**
 
 Success
@@ -970,12 +864,6 @@ error
 ```jsx
 GET /api/notifies
 ```
-
-**Request**
-
-| 欄位(Params)  | 型別( type ) | 說明 (description) |
-| ------------- | ------------ | ------------------ |
-| Authorization | String       | "Bearer"+token     |
 
 **Response**
 
