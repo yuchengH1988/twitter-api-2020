@@ -1,10 +1,17 @@
 const jwt = require('jsonwebtoken')
-const moment = require('moment')
-moment.locale('zh_TW')
 const { Op } = require('sequelize')
+
+// dayjs
+const dayjs = require('dayjs')
+require('dayjs/locale/zh-tw')
+dayjs.locale('zh-tw')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
 const User = require('../models').User
 const Chat = require('../models').Chat
-const UnreadChat = require('../models').UnreadChat
 
 // 驗證身分
 async function authenticated (socket, next) {
@@ -23,7 +30,7 @@ async function authenticated (socket, next) {
     if (user) {
       socket.user = user
       socket.user.socketId = socket.id
-      socket.user.channel = 'publicRoom'
+      socket.user.channel = ''
       next()
     }
   } catch (e) {
@@ -41,13 +48,13 @@ function formatMessage (username, text, msgType) {
   return {
     username,
     text,
-    // time: moment().format('h:mm a'),
-    time: moment.utc().locale('zh_TW').utcOffset('+08:00').format('h:mm a'),
+    // time: moment.utc().locale('zh_TW').utcOffset('+08:00').format('h:mm a'),
+    time: dayjs().tz('Asia/Taipei').format('h:mm a'),
     msgType
   }
 }
 
-async function historyMsg (channel, Chat, next) {
+async function historyMsg (channel) {
   try {
     let chatRecords = await Chat.findAll({
       raw: true,
@@ -66,7 +73,6 @@ async function historyMsg (channel, Chat, next) {
     return chatRecords
   } catch (e) {
     console.log(e)
-    return next(e)
   }
 }
 
@@ -75,60 +81,70 @@ function getPublicUsers (users) {
 }
 
 async function historyMsgForOneUser (id) {
-  // 列出私人歷史訊息
-  const allHistoryChannel = await Chat.findAll({
-    raw: true,
-    nest: true,
-    where: { [Op.or]: [{ UserId: id }, { receivedUserId: id }] },
-    attributes: ['channel']
-  })
-  const channelArr = []
-  allHistoryChannel.forEach(channel => {
-    if (!channelArr.includes(channel.channel)) {
-      channelArr.push(channel.channel)
-    }
-  })
-  // 把時間倒過來排
-  channelArr.reverse()
-  const historyMsgForOneUser = []
-  for (let i = 0; i < channelArr.length; i++) {
-    let chat = await Chat.findAll({
+  try {
+    // 列出私人歷史訊息
+    const allHistoryChat = await Chat.findAll({
       raw: true,
       nest: true,
-      where: { channel: channelArr[i] },
-      order: [['createdAt', 'DESC']],
-      limit: 1,
-      include: [User]
+      where: { [Op.or]: [{ UserId: id }, { receivedUserId: id }] },
+      attributes: ['channel']
     })
-    chat = chat[0]
-    // 找到非本人的資料
-    const Id = chat.UserId === id ? chat.receivedUserId : chat.UserId
-    const user = await User.findByPk(Id)
-    // 重整資料
-    chat = {
-      id: chat.id,
-      UserId: chat.UserId,
-      receivedUserId: chat.receivedUserId,
-      text: chat.message,
-      time: chat.time,
-      channel: chat.channel,
-      username: user.dataValues.name,
-      account: user.dataValues.account,
-      avatar: user.dataValues.avatar
+    const channelArr = []
+    allHistoryChat.forEach(chat => {
+      if (chat.channel !== 'publicRoom') {
+        if (!channelArr.includes(chat.channel)) {
+          channelArr.push(chat.channel)
+        }
+      }
+    })
+    // 把時間倒過來排
+    channelArr.reverse()
+    const historyMsgForOneUser = []
+    for (let i = 0; i < channelArr.length; i++) {
+      let chat = await Chat.findAll({
+        raw: true,
+        nest: true,
+        where: { channel: channelArr[i] },
+        order: [['createdAt', 'DESC']],
+        limit: 1,
+        include: [User]
+      })
+      chat = chat[0]
+      // 找到非本人的資料
+      const Id = chat.UserId === id ? chat.receivedUserId : chat.UserId
+      const user = await User.findByPk(Id)
+      // 重整資料
+      chat = {
+        id: chat.id,
+        UserId: chat.UserId,
+        receivedUserId: chat.receivedUserId,
+        text: chat.message,
+        time: chat.time,
+        channel: chat.channel,
+        username: user.name,
+        account: user.account,
+        avatar: user.avatar
+      }
+      historyMsgForOneUser.push(chat)
     }
-    historyMsgForOneUser.push(chat)
+    return historyMsgForOneUser
+  } catch (e) {
+    console.log(e)
   }
-  return historyMsgForOneUser
 }
 
 async function getUnreadMsg (id) {
-  const msg = await UnreadChat.findAll({
-    raw: true,
-    nest: true,
-    where: { UserId: id },
-    attributes: ['id', 'UserId', 'ChatId', 'channel']
-  })
-  return msg
+  try {
+    const msg = await Chat.findAll({
+      raw: true,
+      nest: true,
+      where: { receivedUserId: id, isRead: false },
+      attributes: ['id', 'UserId', 'receivedUserId', 'channel', 'time']
+    })
+    return msg
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 module.exports = { authenticated, userIndex, formatMessage, historyMsg, getPublicUsers, historyMsgForOneUser, getUnreadMsg }

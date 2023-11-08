@@ -25,7 +25,7 @@ require('./routes')(app)
 // 設置錯誤訊息
 app.use((err, req, res, next) => {
   if (err) {
-    res.status(500).json({ message: String(err) })
+    res.status(500).json({ status: 'error', message: String(err) })
     return next()
   }
 })
@@ -33,6 +33,9 @@ app.use((err, req, res, next) => {
 // set socket.io
 app.get('/chat', (req, res) => {
   res.sendFile( __dirname + '/sockets/index.html')
+})
+app.get('/chat/pub', (req, res) => {
+  res.sendFile( __dirname + '/sockets/pub.html')
 })
 app.get('/chat/room', (req, res) => {
   res.sendFile( __dirname + '/sockets/room.html')
